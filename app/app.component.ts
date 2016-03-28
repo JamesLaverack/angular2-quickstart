@@ -1,10 +1,13 @@
 import {Component} from 'angular2/core';
+import {OnInit} from 'angular2/core';
 import {HeroDetailComponent} from './hero-detail.component';
 import {Hero} from './hero';
+import {HeroService} from './hero.service';
 
 @Component({
     selector: 'my-app',
     directives: [HeroDetailComponent],
+    providers: [HeroService],
     template: `
 	<h2>My Heroes</h2>
 	<ul class="heroes">
@@ -67,22 +70,20 @@ import {Hero} from './hero';
 	    }
 	    `]
 })
-export class AppComponent {
-    public heroes = HEROES;
+export class AppComponent implements OnInit {
+    heroes: Hero[];
     selectedHero: Hero;
 
+    constructor(private _heroService: HeroService) {}
+
     onSelect(hero: hero) { this.selectedHero = hero; }
+
+    getHeroes() {
+	this.heroes = this._heroService.getHeroes();
+    }
+
+    ngOnInit() {
+	this.getHeroes()
+    }
 }
 
-var HEROES: Hero[] = [
-    { "id": 11, "name": "Mr. Nice" },
-    { "id": 12, "name": "Narco" },
-    { "id": 13, "name": "Bombasto" },
-    { "id": 14, "name": "Celeritas" },
-    { "id": 15, "name": "Magneta" },
-    { "id": 16, "name": "RubberMan" },
-    { "id": 17, "name": "Dynama" },
-    { "id": 18, "name": "Dr IQ" },
-    { "id": 19, "name": "Magma" },
-    { "id": 20, "name": "Tornado" }
-];
